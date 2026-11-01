@@ -1,5 +1,4 @@
 import random
-
 import qiskit
 
 
@@ -18,9 +17,15 @@ def make_layer(qubit_count: int, rng: random.Random, two_qubit_density: float) -
         if rng.random() < two_qubit_density:
             layer.cz(qubit1, qubit2)
 
+    return layer
+
 
 def main() -> None:
-    make_layer()
+    qubit_count: int = 3
+    rng: random.Random = random.Random(0)
+    two_qubit_density: float = 0.5
+    layer: qiskit.QuantumCircuit = make_layer(qubit_count, rng, two_qubit_density)
+    print(layer.draw())
 
 
 if __name__ == "__main__":
