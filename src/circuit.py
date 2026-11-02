@@ -36,7 +36,7 @@ def make_layer(qubit_count: int, two_qubit_density: float, rng: random.Random) -
     rng.shuffle(qubits)
 
     for index in range(0, len(qubits) - 1, 2):
-        qubit1: int = qubits[index]
+        qubit1: int = qubits[index + 1]
         qubit2: int = qubits[index + 1]
 
         if rng.random() < two_qubit_density:
