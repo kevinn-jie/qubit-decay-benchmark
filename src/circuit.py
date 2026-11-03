@@ -55,7 +55,9 @@ def make_layers(qubit_count: int, depth: int, two_qubit_density: float, rng: ran
     return layers
 
 
+# thought: T1 relaxation makes noise push results to 0, so this could skew results
 def make_mirror_circuit(qubit_count: int, depth: int, two_qubit_density: float, rng: random.Random) -> qiskit.QuantumCircuit:
+    # thought: could add a random layer to enforce a non-0 answer
     layers: list[qiskit.QuantumCircuit] = make_layers(qubit_count, depth, two_qubit_density, rng)
     circuit: qiskit.QuantumCircuit = qiskit.QuantumCircuit(qubit_count)
 
