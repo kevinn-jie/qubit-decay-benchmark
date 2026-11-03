@@ -19,7 +19,7 @@ def apply_one_qubit_clifford(layer: qiskit.QuantumCircuit, gate: str, qubit: int
         case "sdg":
             layer.sdg(qubit)
         case _:
-            raise ValueError("error: unknown one-qubit Clifford gate {gate}")
+            raise ValueError(f"error: unknown one-qubit Clifford gate {gate}")
 
 
 def make_layer(qubit_count: int, two_qubit_density: float, rng: random.Random) -> qiskit.QuantumCircuit:
@@ -36,7 +36,7 @@ def make_layer(qubit_count: int, two_qubit_density: float, rng: random.Random) -
     rng.shuffle(qubits)
 
     for index in range(0, len(qubits) - 1, 2):
-        qubit1: int = qubits[index + 1]
+        qubit1: int = qubits[index]
         qubit2: int = qubits[index + 1]
 
         if rng.random() < two_qubit_density:
