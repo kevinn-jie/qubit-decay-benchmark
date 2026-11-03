@@ -40,6 +40,7 @@ def make_layer(qubit_count: int, two_qubit_density: float, rng: random.Random) -
         qubit2: int = qubits[index + 1]
 
         if rng.random() < two_qubit_density:
+            # thought: reality does not guarantee neighboring qubits, so should change to avoid unwanted SWAP gates
             layer.cz(qubit1, qubit2)
 
     return layer
