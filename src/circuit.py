@@ -2,35 +2,13 @@ import random
 import qiskit
 
 
-def apply_one_qubit_clifford(layer: qiskit.QuantumCircuit, gate: str, qubit: int) -> None:
-    match gate:
-        case "id":
-            layer.id(qubit)
-        case "x":
-            layer.x(qubit)
-        case "y":
-            layer.y(qubit)
-        case "z":
-            layer.z(qubit)
-        case "h":
-            layer.h(qubit)
-        case "s":
-            layer.s(qubit)
-        case "sdg":
-            layer.sdg(qubit)
-        case _:
-            raise ValueError(f"error: unknown one-qubit Clifford gate {gate}")
-
-
 def make_layer(qubit_count: int, two_qubit_density: float, rng: random.Random) -> qiskit.QuantumCircuit:
     one_qubit_cliffords: list[str] = ["id", "x", "y", "z", "h", "s", "sdg"]
     layer: qiskit.QuantumCircuit = qiskit.QuantumCircuit(qubit_count)
 
     for qubit in range(qubit_count):
         gate: str = rng.choice(one_qubit_cliffords)
-
-        # note: more readable than getattr(layer, gate)(qubit)
-        apply_one_qubit_clifford(layer, gate, qubit)
+        getattr(layer, gate)(qubit)
 
     qubits: list[int] = list(range(qubit_count))
     rng.shuffle(qubits)
