@@ -1,5 +1,7 @@
 import random
 import qiskit
+import qiskit.primitives
+import qiskit.quantum_info
 
 
 def make_layer(qubit_count: int, two_qubit_density: float, rng: random.Random) -> qiskit.QuantumCircuit:
@@ -57,14 +59,14 @@ def make_mirror_circuit(qubit_count: int, depth: int, two_qubit_density: float, 
     return circuit
 
 
-def main() -> None:
-    qubit_count: int = 3
-    depth: int = 4
-    two_qubit_density: float = 0.5
-    rng: random.Random = random.Random(0)
-    circuit: qiskit.QuantumCircuit = make_mirror_circuit(qubit_count, depth, two_qubit_density, rng)
-    print(circuit.draw())
+def is_all_zeros(circuit: qiskit.QuantumCircuit, qubit_count: int, shots: int = 1024) -> bool:
+    sampler: qiskit.primitives.StatevectorSampler = qiskit.primitives.StatevectorSampler()
+    result: qiskit.primitives.PrimitiveResult = sampler.run([circuit], shots=shots).result()
+    counts: dict[str, int] = result[0].data.meas.get_counts()
+    return counts == {"0" * qubit_count: shots}
 
 
-if __name__ == "__main__":
-    main()
+def is_identity(circuit: qiskit.QuantumCircuit, qubit_count: int) -> bool:
+    unmeasured_circuit: qiskit.QuantumCircuit = circuit.remove_final_measurements(inplace=False)
+    identity: qiskit.QuantumCircuit = qiskit.QuantumCircuit(qubit_count)
+    return qiskit.quantum_info.Operator(unmeasured_circuit).equiv(qiskit.quantum_info.Operator(identity))
